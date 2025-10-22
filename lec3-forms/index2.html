@@ -1,0 +1,65 @@
+
+<html>
+    <head>
+
+    </head>
+    <body>
+        <div>
+            <input type="text" id="apiKeyInput" placeholder="API Key" />
+        </div>
+		<div>
+            <textarea id="userInput" placeholder="Your question here..."></textarea>
+        </div>
+        <div>
+            <button id="submitButton" >Zapytaj</button>
+        </div>
+        <p id="responseDataParagraph"></p>
+        <script>
+            const submitButton = document.getElementById("submitButton");
+            const userInput = document.getElementById("userInput");
+            const apiKeyInput = document.getElementById("apiKeyInput");
+            const responseDataParagraph = document.getElementById("responseDataParagraph");
+
+            submitButton.addEventListener('click', async () => {
+                const inputFromTextArea = userInput.value;
+                const apiKey = apiKeyInput.value;
+                const url = "https://api.groq.com/openai/v1/chat/completions";
+                const httpMethod = "POST";
+                const requestHeaders = {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}` // API Key dynamicznie pobierany z inputa
+                };
+                console.log(inputFromTextArea);
+                const requestBody = 
+                JSON.stringify(
+                {
+                    "messages": [
+                    {
+                        "role": "system",
+                        "content": "Zamieniasz wypowiedź użytkownika na tekst pisany naprzemian dużymi i małymi literami."
+                    },
+                    {
+                        "role": "user",
+                        "content": inputFromTextArea
+                    }
+                    ],
+                    "model": "openai/gpt-oss-20b",
+                    "stream": false
+                });
+                const response = await fetch(url, {
+                    method: httpMethod,
+                    headers: requestHeaders,
+                    body: requestBody
+                });
+
+                const responseData = await response.json();
+                //console.log(responseData.choices[0].message);
+                responseDataParagraph.textContent = responseData.choices[0].message.content;
+
+                let newTodoItem = {
+                    priority: responseData.choices[0].message.content
+                };
+            });
+        </script>
+    </body>
+</html>

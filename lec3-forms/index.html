@@ -11,17 +11,73 @@
 <body>
     <div class="container">
         <h1>Lecture 3 - Forms</h1>
-        <form>
-            <label for="inputName">Imię</label>
-            <input id="inputName" type="text"/>
-            <input class="btn btn-primary" type="button" onclick="sayHello()" value="Greet"/>
+        <form class="row g-3">
+
+            <div class="col-md-6">
+                <label for="inputSurname" class="form-label">Nazwisko</label>
+                <input id="inputSurname" type="text" class="form-control"  placeholder="Tutaj wpisz nazwisko"/>
+            </div>
+            <div class="col-md-6">
+                <label for="inputName" class="form-label">Imię</label>
+                <input id="inputName" type="text" class="form-control"/>
+            </div>
+            <div class="col-12">
+                <input class="btn btn-primary" type="button" onclick="sayHello()" value="Greet"/>
+            </div>
         </form>
+        <div class="row">
+            <table class="table table-primary table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>
+                            Imię
+                        </th>
+                        <th>
+                            Nazwisko
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="dynamicTableBody">
+                </tbody>
+            </table>
+        </div>
     </div>
     <script>
         function sayHello() {
-            let nameInput = document.querySelector("#inputName")
-            alert("Hello " + nameInput.value)
+            let nameInput = document.getElementById("inputName")
+            let surnameInput = document.getElementById("inputSurname")
+            
+            let tableBody = document.getElementById("dynamicTableBody")
+            
+            osoby.push({
+                'name': nameInput.value,
+                'surname': surnameInput.value
+            })
+
+            tableBody.innerHTML = ""
+
+            osoby.forEach(element => {
+                let nameTd = document.createElement("td")
+                nameTd.className = "col-md-6"
+                nameTd.innerText = element.name
+
+                let surnameTd = document.createElement("td")
+                surnameTd.className = "col-md-6"
+                surnameTd.innerText = element.surname
+
+                let newRow = document.createElement("tr")
+
+                newRow.appendChild(nameTd)
+                newRow.appendChild(surnameTd)
+
+                tableBody.appendChild(newRow)
+            });
+            //peopleDiv.appendChild(greetingH2)
+            //greetingDiv.innerText = `Hello ${nameInput.value} ${surnameInput.value}`
+            //greetingDiv.innerHTML = `<h2>Hello ${nameInput.value} ${surnameInput.value}</h2>` + greetingDiv.innerHTML
         }
+
+        let osoby = []
     </script>
 </body>
 </html>
